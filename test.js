@@ -2,11 +2,11 @@ const { chromium } = require('playwright');
 
 const URL = "https://www.ysycompany.com/claim-benefits";
 
-// 🌐 PROXY (HTTP AUTH)
+// 🌐 SOCKS5 PROXY
 const proxy = {
-  server: "http://38.154.203.95:5863",
-  username: "orzyxxuq",
-  password: "s5jd613as0pq"
+  server: "socks5://change4.owlproxy.com:7778",
+  username: "93Rblfxfj020_custom_zone_US_st__city_sid_96590445_time_30",
+  password: "4837065"
 };
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -28,18 +28,40 @@ async function runTest() {
 
     await sleep(2000);
 
-    console.log("👉 Looking for button...");
+    console.log("👉 Looking for CTA...");
 
     const cta = page.locator('text=Get Access');
 
     if (await cta.count() > 0) {
       await cta.click();
       console.log("✅ Click success");
+
+      // 🌀 POST CLICK ACTIVITY (30 seconds)
+      console.log("🌀 Simulating post-click behavior...");
+
+      const start = Date.now();
+
+      while (Date.now() - start < 30000) {
+
+        // scroll random
+        await page.mouse.wheel(0, Math.floor(Math.random() * 800) + 200);
+
+        // mouse movement random
+        await page.mouse.move(
+          Math.floor(Math.random() * 1200),
+          Math.floor(Math.random() * 800)
+        );
+
+        // pause random
+        await sleep(Math.floor(Math.random() * 1500) + 500);
+      }
+
+      console.log("✅ Post-click finished");
     } else {
-      console.log("⚠️ Button not found");
+      console.log("⚠️ CTA not found");
     }
 
-    await sleep(3000);
+    await sleep(2000);
 
   } catch (err) {
     console.log("❌ ERROR:", err.message);
